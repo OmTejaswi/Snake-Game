@@ -5,6 +5,9 @@ groundImg = new Image();
 foodImg = new Image();
 groundImg.src = "ground.png";
 foodImg.src = "food.png";
+let direct;
+let pX, pY;
+let newHead;
 
 let food = {
     x: Math.round(Math.random()*17)*32,
@@ -22,17 +25,21 @@ snake[0] = {
 // }
 
 document.addEventListener("keydown",function(event){
-    if(event.keyCode === 37) {
-        snake[0].x -= 32;
+    if(event.keyCode === 37 && direct !== "right") {
+        //snake[0].x -= 32;
+        direct = "left"
     }
-    if(event.keyCode === 39) {
-        snake[0].x += 32;
+    if(event.keyCode === 39 && direct !== "left") {
+        //snake[0].x += 32;
+        direct = "right"
     }
-    if(event.keyCode === 38) {
-        snake[0].y -= 32;
+    if(event.keyCode === 38 && direct !== "down") {
+        //snake[0].y -= 32;
+        direct = "up"
     }
-    if(event.keyCode === 40) {
-        snake[0].y += 32;
+    if(event.keyCode === 40 && direct !== "up") {
+        //snake[0].y += 32;
+        direct = "down"
     }
 })
 
@@ -45,5 +52,33 @@ function game(){
     }
 
     canvas.drawImage(foodImg,food.x,food.y);
+
+    pX = snake[0].x;
+    pY = snake[0].y;
+
+
+    if(direct === "right") {
+        pX += 32;
+    }
+    if(direct === "left") {
+        pX -= 32;
+    }
+    if(direct === "up") {
+        pY -= 32
+    }
+    if(direct === "down") {
+        pY += 32;
+    }
+
+    newHead = {
+        x: pX,
+        y: pY
+    }
+    snake.unshift(newHead);
+
+    pX === food.x && pY === food.y?food = {
+        x: Math.round(Math.random()*17)*32,
+        y: Math.round(Math.random()*17)*32
+    }:snake.pop();
 }
 setInterval(game,100);
